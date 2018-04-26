@@ -79,6 +79,9 @@ func runStargazers(c *cobra.Command, args []string) error {
 	if err := cmd.RunAnalyze(cmd.AnalyzeCmd, args); err != nil {
 		return err
 	}
+	if err := cmd.RunExportToSheets(cmd.ExportCmd, args); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -101,6 +104,7 @@ func init() {
 		cmd.AnalyzeCmd,
 		cmd.ClearCmd,
 		cmd.FetchCmd,
+		cmd.ExportCmd,
 		genDocCmd,
 	)
 	// Map any flags registered in the standard "flag" package into the
@@ -126,4 +130,6 @@ func main() {
 		fmt.Fprintf(os.Stderr, "failed running command %q: %v", os.Args[1:], err)
 		os.Exit(1)
 	}
+	fmt.Println("Github Fetch completed")
+	//UploadToSheets()
 }

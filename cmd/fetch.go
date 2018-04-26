@@ -34,7 +34,7 @@ stargazers for the specified :owner/:repo and then descending into
 each stargazer's followers, other starred repos, and subscribed
 repos. Each subscribed repo is further queried for that stargazer's
 contributions in terms of additions, deletions, and commits. All
-fetched data is cached by URL.
+fetched data is cached by URL. 
 `,
 	Example: `  stargazers fetch --repo=cockroachdb/cockroach --token=f87456b1112dadb2d831a5792bf2ca9a6afca7bc`,
 	RunE:    RunFetch,
