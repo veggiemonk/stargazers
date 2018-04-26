@@ -4,7 +4,7 @@ illuminate your GitHub community by delving into your repo's stars
 
 ### Synopsis
 
-
+Improoved version of the great spencerkimball/stargazers repo
 
 GitHub allows visitors to star a repo to bookmark it for later
 perusal. Stars represent a casual interest in a repo, and when enough
@@ -21,6 +21,7 @@ Basic starting point:
 4. For each stargazer subscription, query the repo statistics to
    get additions / deletions & commit counts for that stargazer
 5. Run analyses on stargazer data
+6. Export as Google Sheet report (New Comparing to original repo)
 
 
 ```

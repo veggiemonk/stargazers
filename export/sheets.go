@@ -142,10 +142,13 @@ func ToSpreadSheet(rootPath string, repo string) {
 	}).Do()
 
 	driveSrv, err := drive.New(client)
-	driveSrv.Parents.Insert(doc.SpreadsheetId, &drive.ParentReference{
-		ParentLink: "144EFimPBTcoHnAzBpeoEcbqN-yeTLAqe",
-	})
-	//driveSrv.Permissions.Insert(doc.SpreadsheetId, &drive.Permission{
+
+	lr, _ := driveSrv.Files.List().Do()
+	fmt.Println(lr)
+	refRes, _ := driveSrv.Parents.Insert(doc.SpreadsheetId, &drive.ParentReference{
+		Id: "144EFimPBTcoHnAzBpeoEcbqN-yeTLAqe",
+	}).Do()
+	fmt.Println(refRes)
 
 }
 
