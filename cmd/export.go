@@ -20,7 +20,7 @@ import (
 	"errors"
 	"log"
 
-	"github.com/drmegavolt/stargazers/export"
+	"github.com/DrMegavolt/stargazers/export"
 	"github.com/spf13/cobra"
 )
 

@@ -48,3 +48,23 @@ stargazers :owner/:repo --token=:access_token
       --verbosity          log level for V logs
       --vmodule            comma-separated list of pattern=N settings for file-filtered logging
 ```
+
+To export to google drive you need to have `token.json` file in the root folder. 
+To obtain it perform the following steps
+
+1. Create credentials using wizzard referenced in this guide
+https://developers.google.com/sheets/api/quickstart/go  
+
+2. Download generated OAuth2 credentials as `client_secret.json` file 
+
+3. Run the app. You will be asked to open link in browser and authorize the app 
+
+4. Once authorized you will be able to download token.json file. This is one time operation. 
+
+5. Next time it will not ask you to follow the link and grant authorization
+
+If `token.json` and `client_secret.json` files are not present the app assumes no google upload is requested
+
+Optionally, you can move created file in some folder. Set google drive folder id as `--folder-id="744EFimPBTcoHnAzBpeoEcbqN-yeTLAqe"`
+
+

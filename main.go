@@ -23,7 +23,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/drmegavolt/stargazers/cmd"
+	"github.com/DrMegavolt/stargazers/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 )
@@ -117,6 +117,8 @@ func init() {
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.Repo, "repo", "r", "", cmd.RepoDesc)
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.AccessToken, "token", "t", "", cmd.AccessTokenDesc)
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.CacheDir, "cache", "c", "./stargazer_cache", cmd.CacheDirDesc)
+	stargazersCmd.PersistentFlags().StringVarP(&cmd.SpreadSheetId, "id", "i", "", cmd.SpreadSheetIdDesc)
+	cmd.ReportTypes = stargazersCmd.PersistentFlags().StringArray("report-types", []string{"stargazers", "profile"}, "")
 }
 
 // Run ...

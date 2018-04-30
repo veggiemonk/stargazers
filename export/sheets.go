@@ -29,12 +29,10 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"time"
 
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	drive "google.golang.org/api/drive/v2"
 	"google.golang.org/api/sheets/v4"
 )
 
@@ -117,66 +115,55 @@ func ToSpreadSheet(rootPath string, repo string) {
 		log.Fatalf("Unable to retrieve Sheets client: %v", err)
 	}
 	fmt.Println(reportFiles)
-	newSheets := make([]*sheets.Sheet, 0)
+	sID := "19agiVeJ-jsn-cbXm2WR4VwAl-fIUaiVK5KOAKKyZpLo"
 
+	// newSheets := make([]*sheets.Sheet, 0)
 	for _, f := range reportFiles {
-
-		newSheets = append(newSheets, &sheets.Sheet{
-			Properties: &sheets.SheetProperties{
-				Title: f,
-			},
-			Data: []*sheets.GridData{
-				&sheets.GridData{
-					RowData: buildRowsFromCsv(path.Join(rootPath, repo, f)),
+		bsr := sheets.BatchUpdateSpreadsheetRequest{
+			Requests: []*sheets.Request{
+				&sheets.Request{
+					AddSheet: &sheets.AddSheetRequest{
+						Properties: &sheets.SheetProperties{
+							Title: f,
+						},
+					},
 				},
 			},
-		})
+		}
+		_, er := srv.Spreadsheets.BatchUpdate(sID, &bsr).Do()
+		if er != nil {
+			fmt.Println("Tab Exists: " + f)
+		}
+		sheetRange := f + "!A1:Z10000"
+		clearRes, _ := srv.Spreadsheets.Values.Clear(sID, sheetRange, &sheets.ClearValuesRequest{}).Do()
+		fmt.Println(clearRes)
+
+		valueRange := sheets.ValueRange{
+			Values: buildRowsFromCsv(path.Join(rootPath, repo, f)),
+		}
+		valueInputOption := "USER_ENTERED"
+		valueRes, err := srv.Spreadsheets.Values.Update(sID, sheetRange, &valueRange).ValueInputOption(valueInputOption).Do()
+		fmt.Println(valueRes, err)
 	}
-	currentTime := time.Now().Local()
-	doc, _ := srv.Spreadsheets.Create(&sheets.Spreadsheet{
-		Properties: &sheets.SpreadsheetProperties{
-			Title: currentTime.Format("2006-01-02"),
-		},
-
-		Sheets: newSheets,
-	}).Do()
-
-	driveSrv, err := drive.New(client)
-
-	lr, _ := driveSrv.Files.List().Do()
-	fmt.Println(lr)
-	refRes, _ := driveSrv.Parents.Insert(doc.SpreadsheetId, &drive.ParentReference{
-		Id: "144EFimPBTcoHnAzBpeoEcbqN-yeTLAqe",
-	}).Do()
-	fmt.Println(refRes)
-
 }
 
-func buildRowsFromCsv(csvPath string) []*sheets.RowData {
+func buildRowsFromCsv(csvPath string) [][]interface{} {
 	fmt.Println("reading " + csvPath)
 	f, _ := os.Open(csvPath)
 	r := csv.NewReader(bufio.NewReader(f))
-	result := make([]*sheets.RowData, 0)
+	result := make([][]interface{}, 0)
 	for {
 		record, err := r.Read()
 		// Stop at EOF.
 		if err == io.EOF {
 			break
 		}
-		row := make([]*sheets.CellData, 0)
+		row := make([]interface{}, 0)
 		for value := range record {
-			row = append(row, &sheets.CellData{
-				UserEnteredValue: &sheets.ExtendedValue{
-					StringValue: record[value],
-				},
-			})
+			row = append(row, record[value])
 		}
-		result = append(result, &sheets.RowData{
-			Values: row,
-		})
+		result = append(result, row)
 
 	}
 	return result
 }
-
-// [END sheets_quickstart]
