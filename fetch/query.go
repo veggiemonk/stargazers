@@ -46,11 +46,11 @@ const (
 
 // Context holds config information used to query GitHub.
 type Context struct {
-	Repo     string // Repository (:owner/:repo)
-	Token    string // Access token
-	CacheDir string // Cache directory
-
-	acceptHeader string // Optional Accept: header value
+	Repo            string // Repository (:owner/:repo)
+	Token           string // Access token
+	CacheDir        string // Cache directory
+	AdvancedReports bool   // enable advanced reporting
+	acceptHeader    string // Optional Accept: header value
 }
 
 type User struct {
@@ -226,25 +226,28 @@ func QueryAll(c *Context) error {
 	if err = QueryUserInfo(c, sg); err != nil {
 		return err
 	}
-	// Query followers for all stargazers.
-	if err = QueryFollowers(c, sg); err != nil {
-		return err
-	}
-
-	// Unique map of repos by repo full name.
 	rs := map[string]*Repo{}
 
-	// Query starred repos for all stargazers.
-	if err = QueryStarred(c, sg, rs); err != nil {
-		return err
-	}
-	// Query subscribed repos for all stargazers.
-	if err = QuerySubscribed(c, sg, rs); err != nil {
-		return err
-	}
-	// Query contributions to subscribed repos for all stargazers.
-	if err = QueryContributions(c, sg, rs); err != nil {
-		return err
+	if c.AdvancedReports {
+		// Query followers for all stargazers.
+		if err = QueryFollowers(c, sg); err != nil {
+			return err
+		}
+
+		// Unique map of repos by repo full name.
+
+		// Query starred repos for all stargazers.
+		if err = QueryStarred(c, sg, rs); err != nil {
+			return err
+		}
+		// Query subscribed repos for all stargazers.
+		if err = QuerySubscribed(c, sg, rs); err != nil {
+			return err
+		}
+		// Query contributions to subscribed repos for all stargazers.
+		if err = QueryContributions(c, sg, rs); err != nil {
+			return err
+		}
 	}
 	return SaveState(c, sg, rs)
 }

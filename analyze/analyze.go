@@ -26,7 +26,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/drmegavolt/stargazers/fetch"
+	"github.com/DrMegavolt/stargazers/fetch"
 )
 
 const (

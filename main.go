@@ -23,7 +23,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/drmegavolt/stargazers/cmd"
+	"github.com/DrMegavolt/stargazers/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 )
@@ -79,6 +79,9 @@ func runStargazers(c *cobra.Command, args []string) error {
 	if err := cmd.RunAnalyze(cmd.AnalyzeCmd, args); err != nil {
 		return err
 	}
+	if err := cmd.RunExportToSheets(cmd.ExportCmd, args); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -101,6 +104,7 @@ func init() {
 		cmd.AnalyzeCmd,
 		cmd.ClearCmd,
 		cmd.FetchCmd,
+		cmd.ExportCmd,
 		genDocCmd,
 	)
 	// Map any flags registered in the standard "flag" package into the
@@ -113,6 +117,8 @@ func init() {
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.Repo, "repo", "r", "", cmd.RepoDesc)
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.AccessToken, "token", "t", "", cmd.AccessTokenDesc)
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.CacheDir, "cache", "c", "./stargazer_cache", cmd.CacheDirDesc)
+	stargazersCmd.PersistentFlags().StringVarP(&cmd.SpreadSheetID, "id", "i", "", cmd.SpreadSheetIDDesc)
+	stargazersCmd.PersistentFlags().BoolVarP(&cmd.AdvancedReporting, "advanced", "a", false, cmd.AdvancedReportingDesc)
 }
 
 // Run ...
@@ -126,4 +132,5 @@ func main() {
 		fmt.Fprintf(os.Stderr, "failed running command %q: %v", os.Args[1:], err)
 		os.Exit(1)
 	}
+	fmt.Println("Github Fetch completed")
 }

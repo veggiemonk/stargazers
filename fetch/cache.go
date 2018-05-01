@@ -89,8 +89,8 @@ func putCache(c *Context, req *http.Request, resp *http.Response) error {
 // cacheEntryFilename creates a filename-safe name in a subdirectory
 // of the configured cache dir, with any access token stripped out.
 func cacheEntryFilename(c *Context, url string) string {
-	newUrl := strings.Replace(url, fmt.Sprintf("access_token=%s", c.Token), "", 1)
-	return filepath.Join(c.CacheDir, c.Repo, sanitize.BaseName(newUrl))
+	newURL := strings.Replace(url, fmt.Sprintf("access_token=%s", c.Token), "", 1)
+	return filepath.Join(c.CacheDir, c.Repo, sanitize.BaseName(newURL))
 }
 
 // clearEntry clears a specified cache entry.
