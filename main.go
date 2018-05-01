@@ -118,7 +118,7 @@ func init() {
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.AccessToken, "token", "t", "", cmd.AccessTokenDesc)
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.CacheDir, "cache", "c", "./stargazer_cache", cmd.CacheDirDesc)
 	stargazersCmd.PersistentFlags().StringVarP(&cmd.SpreadSheetID, "id", "i", "", cmd.SpreadSheetIDDesc)
-	cmd.ReportTypes = stargazersCmd.PersistentFlags().StringArray("report-types", []string{"stargazers", "profile"}, "")
+	stargazersCmd.PersistentFlags().BoolVarP(&cmd.AdvancedReporting, "advanced", "a", false, cmd.AdvancedReportingDesc)
 }
 
 // Run ...

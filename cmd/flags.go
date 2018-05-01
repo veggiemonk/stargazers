@@ -53,8 +53,11 @@ const CacheDirDesc = "directory for storing cached GitHub API responses"
 // Repo specifies the the owner and repository in :owner/:repo format.
 var Repo string
 
-// ReportTypes enabled reports to be generated
-var ReportTypes *[]string
+// AdvancedReporting enabled reports for followers, cross-stars, commiters
+var AdvancedReporting bool
+
+// AdvancedReportingDesc describes AdvancedReporting usage
+const AdvancedReportingDesc = "Enable advanced long running reports: followers, cross-stars, commiters"
 
 // SpreadSheetID Google drive of folder to move file (optional)
 var SpreadSheetID string
