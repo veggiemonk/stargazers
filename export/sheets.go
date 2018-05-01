@@ -89,7 +89,7 @@ func saveToken(path string, token *oauth2.Token) {
 }
 
 // ToSpreadSheet uploads all csv files under rootPath/repo as sheets in a SpreadSheet
-func ToSpreadSheet(rootPath string, repo string) {
+func ToSpreadSheet(rootPath string, repo string, spreadSheetID string) {
 	var reportFiles []string
 	filepath.Walk(rootPath, func(p string, f os.FileInfo, _ error) error {
 		if filepath.Ext(p) == ".csv" {
@@ -114,8 +114,6 @@ func ToSpreadSheet(rootPath string, repo string) {
 	if err != nil {
 		log.Fatalf("Unable to retrieve Sheets client: %v", err)
 	}
-	fmt.Println(reportFiles)
-	sID := "19agiVeJ-jsn-cbXm2WR4VwAl-fIUaiVK5KOAKKyZpLo"
 
 	// newSheets := make([]*sheets.Sheet, 0)
 	for _, f := range reportFiles {
@@ -130,20 +128,21 @@ func ToSpreadSheet(rootPath string, repo string) {
 				},
 			},
 		}
-		_, er := srv.Spreadsheets.BatchUpdate(sID, &bsr).Do()
+		_, er := srv.Spreadsheets.BatchUpdate(spreadSheetID, &bsr).Do()
 		if er != nil {
 			fmt.Println("Tab Exists: " + f)
 		}
 		sheetRange := f + "!A1:Z10000"
-		clearRes, _ := srv.Spreadsheets.Values.Clear(sID, sheetRange, &sheets.ClearValuesRequest{}).Do()
-		fmt.Println(clearRes)
+		srv.Spreadsheets.Values.Clear(spreadSheetID, sheetRange, &sheets.ClearValuesRequest{}).Do()
 
 		valueRange := sheets.ValueRange{
 			Values: buildRowsFromCsv(path.Join(rootPath, repo, f)),
 		}
 		valueInputOption := "USER_ENTERED"
-		valueRes, err := srv.Spreadsheets.Values.Update(sID, sheetRange, &valueRange).ValueInputOption(valueInputOption).Do()
-		fmt.Println(valueRes, err)
+		_, err := srv.Spreadsheets.Values.Update(spreadSheetID, sheetRange, &valueRange).ValueInputOption(valueInputOption).Do()
+		if err != nil {
+			fmt.Println("Failed updating range: " + f)
+		}
 	}
 }
 

@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/DrMegavolt/stargazers/export"
@@ -44,6 +45,11 @@ func RunExportToSheets(cmd *cobra.Command, args []string) error {
 	}
 
 	log.Printf("exporting to Google Sheets GitHub data for repository %s", Repo)
-	export.ToSpreadSheet(CacheDir, Repo)
+	if len(SpreadSheetID) > 0 {
+		fmt.Println("Exporting to: https://docs.google.com/spreadsheets/d/" + SpreadSheetID)
+		export.ToSpreadSheet(CacheDir, Repo, SpreadSheetID)
+	} else {
+		fmt.Println("SpreadSheetID not provided (--id param). Skipping publishing to google docs")
+	}
 	return nil
 }
