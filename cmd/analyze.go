@@ -20,8 +20,8 @@ import (
 	"errors"
 	"log"
 
-	"github.com/DrMegavolt/stargazers/analyze"
-	"github.com/DrMegavolt/stargazers/fetch"
+	"github.com/veggiemonk/stargazers/analyze"
+	"github.com/veggiemonk/stargazers/fetch"
 	"github.com/spf13/cobra"
 )
 

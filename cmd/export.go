@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/DrMegavolt/stargazers/export"
+	"github.com/veggiemonk/stargazers/export"
 	"github.com/spf13/cobra"
 )
 

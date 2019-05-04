@@ -10,11 +10,11 @@ spec:
         spec:
           containers:
           - name: stargazers
-            image: drmegavolt/stargazers:latest # replace with your image 
+            image: veggiemonk/stargazers:latest # replace with your image
             args:
             - stargazers
             - --repo=ExpressGateway/express-gateway # repo name to check 
-            - --token=f87456b1112dadb2d831a5792bf2ca9a6afca7bc # github token
+            - --token=XXX # github token
             - --id=19agiVeJ-jsn-cbXm2WR4VwAl-fIUaiVK5KOAKKyZpLo # google sheets id
             # - --advanced=true # load all data, several hours to run  
           restartPolicy: OnFailure
